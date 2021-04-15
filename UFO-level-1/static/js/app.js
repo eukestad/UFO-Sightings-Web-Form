@@ -1,6 +1,9 @@
 // from data.js
 var tableData = data;
 
+var dataTable = tableData.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
+console.log(dataTable)
+
 function init() {
   tableData.forEach((ufoReport) => {
     // console.log(Object.keys(ufoReport))
@@ -35,19 +38,19 @@ function runEnter() {
 
   if (inputDate != "") {
     // Remove current rows
-    tbody.selectAll("tr").remove()
+    tbody.selectAll("tr").remove();
 
     // Re-populate Table
-    tableData.forEach((ufoReport) => {
-      console.log('Date Entered: ', inputDate);
-      if (ufoReport.datetime === inputDate) {
-        var row = tbody.append("tr");
-        Object.entries(ufoReport).forEach(([key, value]) => {
-          var cell = row.append("td");
-          cell.text(value);
-        });
-      }
+    filterData = tableData.filter(ufo => ufo.datetime === inputDate);
+    console.log(filterData);
 
+    filterData.forEach((ufoReport) => {
+      // console.log(Object.keys(ufoReport))
+      var row = tbody.append("tr");
+      Object.entries(ufoReport).forEach(([key, value]) => {
+        var cell = row.append("td");
+        cell.text(value);
+      });
     });
   }
 
