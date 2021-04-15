@@ -1,9 +1,6 @@
 // from data.js
 var tableData = data;
 
-var dataTable = tableData.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
-console.log(dataTable)
-
 function init() {
   tableData.forEach((ufoReport) => {
     // console.log(Object.keys(ufoReport))
