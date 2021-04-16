@@ -1,6 +1,7 @@
 # user added
 *.code-workspace
-UFO-level-2/
+sandbox.js
+# UFO-level-2/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

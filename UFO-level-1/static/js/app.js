@@ -1,9 +1,18 @@
 // from data.js
 var tableData = data;
 
+function removeAlert() {
+  var selectedAlert = d3.selectAll("#no-data")
+  if (typeof selectedAlert !== 'undefined') {
+    selectedAlert.remove()
+  };
+};
+
 function init() {
+  // remove alert
+  removeAlert();
+
   tableData.forEach((ufoReport) => {
-    // console.log(Object.keys(ufoReport))
     var row = tbody.append("tr");
     Object.entries(ufoReport).forEach(([key, value]) => {
       var cell = row.append("td");
@@ -18,7 +27,9 @@ var tbody = d3.select("tbody");
 // Select the button
 var button = d3.select("#filter-btn");
 // Select the form
-var form = d3.select("#form");
+var form = d3.select("form");
+// select the alert
+// var noData = d3.select("noData");
 
 // Create event handlers 
 button.on("click", runEnter);
@@ -29,20 +40,28 @@ function runEnter() {
   // Prevent the page from refreshing
   d3.event.preventDefault();
 
+  // remove alert
+  removeAlert();
+
+  // Remove current rows
+  tbody.selectAll("tr").remove();
+
   var inputElement = d3.select("#datetime");
   var inputDate = inputElement.property("value");
   console.log(inputDate);
 
   if (inputDate != "") {
-    // Remove current rows
-    tbody.selectAll("tr").remove();
-
-    // Re-populate Table
+    // filter by date
     filterData = tableData.filter(ufo => ufo.datetime === inputDate);
-    console.log(filterData);
+  }
+  else {
+    init()
+  }
 
+  // check that filtered data will return rows
+  if (filterData.length > 0) {
+    // Re-populate Table
     filterData.forEach((ufoReport) => {
-      // console.log(Object.keys(ufoReport))
       var row = tbody.append("tr");
       Object.entries(ufoReport).forEach(([key, value]) => {
         var cell = row.append("td");
@@ -50,13 +69,13 @@ function runEnter() {
       });
     });
   }
-
-  else {
-    // Remove current rows
-    tbody.selectAll("tr").remove()
-    
-    // Re-populate Table
-    init()
+  else {   
+    // alert showing no data returned
+    var noData = d3.select("#table-area").append("div");
+    noData.text("Oops! No records matching your entries were found.");
+    noData.attr("class", "alert alert-warning");
+    noData.property("role", "alert")
+    noData.attr("id","no-data");
   };
 };
 
